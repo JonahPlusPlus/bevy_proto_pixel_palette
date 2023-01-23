@@ -25,7 +25,7 @@ fn setup(
         transform: Transform::default().with_scale(Vec3::splat(128.)),
         material: materials.add(PaletteMaterial::new(
             asset_server.load("images/palette.png"),
-            asset_server.load("images/uv_map.png")
+            asset_server.load("images/uv_map_int.png")
         )),
         ..default()
     });

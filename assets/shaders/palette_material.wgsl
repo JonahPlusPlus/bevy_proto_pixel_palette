@@ -13,21 +13,24 @@ var uv_map_sampler: sampler;
 fn fragment(
     #import bevy_sprite::mesh2d_vertex_output
 ) -> @location(0) vec4<f32> {
-    let dims = vec2<f32>(textureDimensions(uv_map_texture));
+    let uv_map_dims = vec2<f32>(textureDimensions(uv_map_texture));
+    let palette_dims = vec2<f32>(textureDimensions(palette_texture));
 
-    let map_uv = uv - (uv % (1f/dims)) + (1f / (dims * 2f));
+    let uv_map_uv = uv - (uv % (1f/uv_map_dims)) + (1f / (uv_map_dims * 2f));
 
-    let palette_uv = textureSample(
+    let uv_map = textureSample(
         uv_map_texture,
         uv_map_sampler,
-        map_uv
+        uv_map_uv
     );
+
+    let palette_uv = (uv_map.rg * 255f) + (vec2<f32>(0.5) / palette_dims);
 
     let color = textureSample(
         palette_texture,
         palette_sampler,
-        palette_uv.rg
+        palette_uv
     );
 
-    return vec4<f32>(color.rgb, 1f);
+    return vec4<f32>(color.rgb, uv_map.a);
 }
